@@ -1,0 +1,132 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Site.master.cs" Inherits="UIL.Site" %>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title></title>
+    <!--样式-->
+    <!--第一步：引入Easy UI所需的样式表文件-->
+    <link href="css/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <!--第二步：引入Easy UI所需的图标样式表文件-->
+    <link href="css/themes/icon.css" rel="stylesheet" type="text/css" />
+    <!--第三步：引入jQuery所需的js文件-->
+    <script src="Scripts/easyui/jquery-1.11.3.js" type="text/javascript"></script>
+    <!--第四步：引入Easy UI所需的js文件-->
+    <script src="Scripts/easyui/jquery.easyui.min.js" type="text/javascript"></script>
+    <!--第五步：引入Easy UI所需的汉化包js文件-->
+    <script src="Scripts/easyui/easyui-lang-zh_CN.js" type="text/javascript"></script>
+    <link href="css/common.css" rel="stylesheet" type="text/css" />
+    <link href="css/main.css" rel="stylesheet" type="text/css" />
+    <script src="Scripts/SVSE.UI.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        //文档就绪函数
+        //  <!--渐变弹出窗口窗口-->
+        $(function () {
+            $("#hyPersonInfo").click(function () {
+//                $("#dlg").dialog({ width: 400, height: 300 }).dialog("setTitle", "个人信息").dialog("open");
+//                $("#frm").attr("src", "PersonalInfo.aspx?type=add");  //通过attr函数给iframe标签的属性src赋值
+
+                dialog.show("PersonalInfo.aspx?type=add", "个人信息", 400, 320);
+            });
+        });
+    </script>
+    <style type="text/css">
+        .div-menu a
+        {
+            text-decoration: none;
+            color: Blue;
+        }
+        a:hover
+        {
+            color: Red;
+            font-size: 15px;
+        }
+    </style>
+    <asp:ContentPlaceHolder ID="head" runat="server">
+    </asp:ContentPlaceHolder>
+</head>
+<body>
+    <form id="form1" runat="server">
+    <div class="divTop">
+        <img alt="" src="image/main/logo.png" style="float: left;" />
+        <img alt="" src="image/main/join.gif" style="float: left; position: relative; top: 49px;" />
+        <div class="div-menu">
+            <%
+                Model.UserInfo u = (Model.UserInfo)Session["User"];
+                if (u.UserType == 2)
+                {
+                 
+            %>
+            <div>
+                <a target="_self" href="UserManage.aspx?name=用户管理">用户管理 </a>
+            </div>
+            <div>
+                <a target="_self" href="DepartmentManage.aspx?name=部门管理">部门管理</a>
+            </div>
+            <div>
+                <a target="_self" href="AttendanceSetting.aspx?name=考勤设置">考勤设置 </a>
+            </div>
+            <% 
+                }
+                else if (u.UserType == 1)
+                {
+                  
+            %>
+            <div>
+                <a target="_self" href="AttendanceManage.aspx?name=考勤管理">考勤管理 </a>
+            </div>
+            <div>
+                <a target="_self" href="LeaveApprove.aspx?name=请假审批">请假审批 </a>
+            </div>
+            <% 
+                }
+                else if (u.UserType == 0)
+                {                 
+            %>
+            <div>
+                <a target="_self" href="MyAttendance.aspx?name=我的考勤">我的考勤</a>
+            </div>
+            <div>
+                <a target="_self" href="LeaveApply.aspx?name=请假申请">请假申请 </a>
+            </div>
+            <% 
+                }
+            %>
+        </div>
+        <div class="divLnk">
+            <img alt="" src="image/main/help.png" width="16px" height="16px" />
+            <asp:HyperLink ID="hyPersonInfo" runat="server" NavigateUrl="#" ForeColor="white">个人信息</asp:HyperLink>
+            <img alt="" src="image/main/off.jpg" width="16px" height="16px" />
+            <asp:LinkButton ID="lbExit" runat="server" ForeColor="white" OnClick="lbExit_Click"
+                OnClientClick="return confirm('你确定要退出系统吗？');">退出</asp:LinkButton>
+        </div>
+    </div>
+    <div class="divCurrent">
+     <span>
+        <img src="image/main/cube.gif" alt="" />       
+            <asp:Literal ID="Literal1" runat="server">当前位置:</asp:Literal>
+            <asp:Literal ID="urlName" runat="server"></asp:Literal>
+        </span>
+    </div>
+    <div class="main">
+        <div class="mainTitle">
+            <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
+            </asp:ContentPlaceHolder>
+        </div>
+        <hr />
+        <div>
+            <asp:ContentPlaceHolder ID="ContentPlaceHolder2" runat="server">
+            </asp:ContentPlaceHolder>
+        </div>
+    </div>
+    <div class="divBottom">
+        <span>当前用户：</span><asp:Label ID="lblUserName" runat="server"></asp:Label>
+        &nbsp;<span style="margin-left: 20px;">用户类型：</span><asp:Label ID="lblUserType" runat="server"></asp:Label>
+        &nbsp;<span style="margin-right: 5px; float: right;">中科微至IT研发部 —— 考勤系统</span>
+    </div>
+    <div id="dlg" class="easyui-dialog" title="My Dialog" data-options="iconCls:'icon-save',resizable:true,modal:true,closed:true">
+        <iframe id="frm" width="99%" height="99%" frameborder="0"></iframe>
+    </div>
+    </form>
+</body>
+</html>
